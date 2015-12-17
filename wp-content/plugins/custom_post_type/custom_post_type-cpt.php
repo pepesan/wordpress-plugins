@@ -76,6 +76,9 @@ function cdd_register_post_type(){
         'supports'=>array(
             //título
             'title',
+            /* Comentamos de momento este código porque vamos a meter los campos perosnalizados para rellenar el
+            * tipo de contenido
+
             //texto principal
             'editor',
             //autor
@@ -84,6 +87,7 @@ function cdd_register_post_type(){
             'custom-fields',
             //miniatura
             'thumbnail'
+            */
         ),
     );
     register_post_type("job",$args);
