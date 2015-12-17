@@ -105,3 +105,48 @@ function cdd_register_post_type(){
 }
 
 add_action("init","cdd_register_post_type");
+
+//creación de una taxonomía explicado en https://developer.wordpress.org/reference/functions/register_taxonomy/
+function cdd_registry_taxonomy(){
+    $singular='Localización';
+    $plural='Localizaciones';
+    $labels=array(
+        'name'=>$plural,
+        'singular_name'=>$singular,
+        'search_items'=>'Buscar '.$plural,
+        'popular_items'=>$plural.' Populares',
+        'all_items'=>'Todas las '.$plural,
+        'parent_item'=>null,
+        'parent_item_colon'=>null,
+        'edit_item'=>'Editar '.$singular,
+        'update_item'=>'Actualizar '.$singular,
+        'add_new_item'=>'Añadir Nueva '.$singular,
+        'new_item_name'=>'Nuemo Nombre de '.$singular,
+        'separate_items_with_commas'=>$plural." separadas por comas",
+        'add_or_remove_items'=>'Añadir o Borrar '.$plural,
+        'choose_from_most_used'=>'Elegir entra las más usadas',
+        'not_found'=>'No se han encontrado '.$plural,
+        'menu_name'=>$plural
+    );
+    $args=array(
+        //define si la taxonomía es jerárquica
+        'hierarchical'=>true,
+        //definición de la etiquetas ('literales de texto')
+        'labels'=>$labels,
+        //define si se ve en el admin
+        'show_ui'=>true,
+        //definición de confirmación de que se ve en el admin
+        'show_admin_column'=>true,
+        //método que se llamará cuando quiera saber cuantos términos hay en la taxonomía
+        'update_count_callback'=>'_update_post_term_count',
+        //Define si puede colocarse en la url como buscable
+        'query_var'=>true,
+        //reescritura de la ruta a /location
+        'rewrite'=>array(
+            'slug'=>'location',
+        ),
+    );
+    //al registrar hay que colocar como segundo parámetro el mismo nombre que se ha utilizado en el register_post_type()
+    register_taxonomy('location','job',$args);
+}
+add_action('init','cdd_registry_taxonomy');
