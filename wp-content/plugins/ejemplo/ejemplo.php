@@ -45,4 +45,12 @@ if (is_admin()) {
 	//add_action();
 	//add_filter();
 	add_action("wp_before_admin_bar_render", "cdd_add_ga_link");
+
+
 }
+//ejemplo de filtro
+function modify_author_link( $link ) {
+    $link = 'http://example.com/';
+    return $link;
+}
+add_filter( 'author_link', 'modify_author_link', 10, 1 );
