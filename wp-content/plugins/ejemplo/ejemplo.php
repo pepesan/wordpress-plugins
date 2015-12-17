@@ -50,7 +50,7 @@ if (is_admin()) {
 }
 //ejemplo de filtro
 function modify_author_link( $link ) {
-    $link = 'http://example.com/';
+    $link = 'http://cursosdedesarrollo.com/';
     return $link;
 }
 add_filter( 'author_link', 'modify_author_link', 10, 1 );
