@@ -16,3 +16,4 @@ if(!defined('ABSPATH')){
 $dir=plugin_dir_path(__FILE__);
 require_once ($dir.'custom_post_type-cpt.php');
 require_once ($dir.'custom_post_type-render-admin.php');
+require_once ($dir.'custom_post_type-fields.php');
