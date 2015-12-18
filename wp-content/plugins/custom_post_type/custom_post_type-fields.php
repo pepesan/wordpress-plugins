@@ -27,6 +27,9 @@ function cdd_meta_callback($post){
     wp_nonce_field(basename(__FILE__),'cdd_jobs_nonce');
     //cogemos los datos del post según su ID, referencia: https://developer.wordpress.org/reference/functions/get_post_meta/
     $cdd_stored_meta=get_post_meta($post->ID);
+    //var_dump($cdd_stored_meta);
+    //global $post_data;
+    //var_dump($_POST);
     //colocamos el código HTML fuera del bloque de código que sandrá en la meta-caja del formulario
     ?>
     <div>
@@ -61,8 +64,8 @@ function cdd_meta_callback($post){
     <div class="meta-editor">
         <?php
         //incluimos un editor, referencia: https://codex.wordpress.org/Function_Reference/wp_editor
-        $content=get_post_meta($post->ID,'job_principle_duties',true);
-        $editor="job_principle_duties";
+        $content=get_post_meta($post->ID,'job-principle-duties',true);
+        $editor="job-principle-duties";
         $settings=array(
             'textarea_rows'=>5,
             'media_buttons'=>true,
@@ -100,7 +103,15 @@ function cdd_meta_callback($post){
     <?php
 }
 
-function cdd_meta_save($post_id){
+//función que permite salvar los campos
+function cdd_meta_save($post_id, $post){
+
+    if($post->post-type!='job'){
+        return;
+    }
+    /*
+     * TODO: comprobar porqué este código comentado falla
+     *
     //comprueba el estado de salvado
     $is_autosave=wp_is_post_autosave($post_id);
     $is_revision=wp_is_post_revision($post_id);
@@ -109,20 +120,29 @@ function cdd_meta_save($post_id){
     if($is_autosave || $is_revision || $is_valid_nonce){
         return;
     }
+    */
+
     //si está presente el ID actualizamos, referencia: https://developer.wordpress.org/reference/functions/update_post_meta/
     // utilizamos sanitize_text_field() para validar que no nos metan mierdas por el campo de texto, referencia: https://codex.wordpress.org/Function_Reference/sanitize_text_field
 
     if(isset($_POST['job-id'])){
-        update_post_meta($post_id,'job_id',sanitize_text_field( $_POST['job-id']));
+        update_post_meta($post_id,'job-id',sanitize_text_field( $_POST['job-id']));
     }
     if(isset($_POST['job-date-listed'])){
-        update_post_meta($post_id,'job_date_listed',sanitize_text_field( $_POST['job_date_listed']));
+        update_post_meta($post_id,'job-date-listed',sanitize_text_field( $_POST['job-date-listed']));
     }
     if(isset($_POST['job-date-deadline'])){
-        update_post_meta($post_id,'job_date_deadline',sanitize_text_field( $_POST['job_date_deadline']));
+        update_post_meta($post_id,'job-date-deadline',sanitize_text_field( $_POST['job-date-deadline']));
     }
-    if(isset($_POST['job_principle_duties'])){
-        update_post_meta($post_id,'job_principle_duties',sanitize_text_field( $_POST['job_principle_duties']));
+    if(isset($_POST['job-principle-duties'])){
+        update_post_meta($post_id,'job-principle-duties',sanitize_text_field( $_POST['job-principle-duties']));
+    }
+    if(isset($_POST['job-min-req'])){
+        update_post_meta($post_id,'job-min-req',sanitize_text_field( $_POST['job-min-req']));
+    }
+    if(isset($_POST['job-pref-req'])){
+        update_post_meta($post_id,'job-pref-req',sanitize_text_field( $_POST['job-pref-req']));
     }
 }
-add_action('save_post','cdd_meta_save');
+//se utiliza el hook save_post
+add_action('save_post','cdd_meta_save',10,2);
